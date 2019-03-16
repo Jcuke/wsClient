@@ -11,10 +11,7 @@ import com.tl.util.requestUtils.json.JSONUtil;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Ron
@@ -78,6 +75,9 @@ public class TestMethod {
     }
 
     public static void main(String[] args) {
+
+        //Arrays.stream(args).forEach(x -> System.out.println("参数: " + x));
+
         multiUserTest();
     }
 
