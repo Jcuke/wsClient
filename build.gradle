@@ -1,6 +1,7 @@
 group 'com.wsClient'
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 sourceCompatibility = 1.8
 
@@ -25,11 +26,15 @@ dependencies {
     compile "org.slf4j:slf4j-api:1.7.12"
 }
 
-task "create-dirs" << {
-    sourceSets*.java.srcDirs*.each {
-        it.mkdirs()
+task listJars << {
+    configurations.compile.each { File file -> println file.absolutePath }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.service.TestMethod'
     }
-    sourceSets*.resources.srcDirs*.each{
-        it.midirs()
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
