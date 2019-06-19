@@ -14,7 +14,7 @@ public class EncryptUtil {
     // 向量 可有可无 终端后台也要约定
     private final static String iv = "01234567";
 
-    static public String encryptKey = "246887c3-ee20-4fe8-a320-1fde4a8d10b6";
+    static public String encryptKey = "c21d31be-4300-4881-a553-156ebb5df087";
 
     public final static String encrypt(String plainText) throws Exception {
 

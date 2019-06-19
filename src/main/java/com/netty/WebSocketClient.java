@@ -38,19 +38,17 @@ public final class WebSocketClient implements Runnable {
     }
 
     public static void main(String[] args) throws Exception {
-        TestMethod testMethod = new TestMethod();
-        CommonResponse cr = testMethod.getLiveInitInfo();
-        HashMap map = (HashMap) cr.getData();
-        Map initOutput = (Map) (map.get("liveInitInfo"));
-        String userInfoEncryptStr = (String) initOutput.get("userInfoEncryptStr");
-        String k = (String) initOutput.get("k");
-        System.out.println("userInfoEncryptStr:\n" + userInfoEncryptStr);
-        System.out.println("k:\n" + k);
-
-        String uriParamStr = EncryptUtil.encrypt(userInfoEncryptStr + "_____" + k);
-
-        Thread webSocketClientTread = new Thread(new WebSocketClient(uriParamStr));
-        webSocketClientTread.start();
+        //TestMethod testMethod = new TestMethod();
+        //CommonResponse cr = testMethod.getLiveInitInfo();
+        //HashMap map = (HashMap) cr.getData();
+        //Map initOutput = (Map) (map.get("liveInitInfo"));
+        //String userInfoEncryptStr = (String) initOutput.get("userInfoEncryptStr");
+        //String k = (String) initOutput.get("k");
+        //System.out.println("userInfoEncryptStr:\n" + userInfoEncryptStr);
+        //System.out.println("k:\n" + k);
+        //
+        //Thread webSocketClientTread = new Thread(new WebSocketClient(uriParamStr));
+        //webSocketClientTread.start();
     }
 
     @Override
@@ -67,7 +65,7 @@ public final class WebSocketClient implements Runnable {
         URI uri = null;
         try{
             //uri = new URI("ws", "", "192.168.88.35", 15247, "/websocket", uriParamStr, "");
-            uri = new URI("ws://192.168.88.35:15247/websocket/" +  uriParamStr);
+            uri = new URI("ws://"+ TestMethod.socketHost +"/websocket/" +  uriParamStr);
             //uri = new URI("ws://192.168.88.35:15247/websocket");
             //uri = new URI(System.getProperty("url", "ws://127.0.0.1:15247/websocket"));
 

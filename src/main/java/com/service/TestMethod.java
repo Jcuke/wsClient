@@ -20,20 +20,24 @@ import java.util.*;
  */
 public class TestMethod {
 
+    public static final String socketHost = "websocket.kltbj.com:15247";
+    public static final String apiHost = "54.254.179.115:5046";
+    public static final String liveId = "83710105";
+    
     public CommonResponse getLiveInitInfo() {
         try {
             //String apiUrl = "39.108.90.33:9051";
             //String apiUrl = "192.168.88.200:9051";
-            String apiUrl = "192.168.88.35:5046";
+            //String apiUrl = "192.168.88.35:5046";
 
             LiveEnterRequest request = new LiveEnterRequest();
-            request.setLiveId("17000545");
+            request.setLiveId(liveId);
             request.setAppId("2");
             request.setUserId("220c508a-e2fd-4482-8da0-75854a8da72b");
             request.setEnterType("2");
             request.setIsReconnect("0");
 
-            String result = HttpUtil4LiveRecord.post("http://" + apiUrl + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
+            String result = HttpUtil4LiveRecord.post("http://" + apiHost + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
             CommonResponse cr = JSONUtil.fromJson(result, CommonResponse.class);
             if (Constant.RetCode.SUCCESS == cr.getCode()) {
                 //System.out.print("接口调用成功: " + cr.getData());
@@ -51,16 +55,16 @@ public class TestMethod {
         try {
             //String apiUrl = "39.108.90.33:9051";
             //String apiUrl = "192.168.88.200:9051";
-            String apiUrl = "192.168.88.35:5046";
+            //String apiUrl = "192.168.88.35:5046";
 
             LiveEnterRequest request = new LiveEnterRequest();
-            request.setLiveId("31797277");
+            request.setLiveId(liveId);
             request.setAppId("1");
             request.setUserId(userId);
             request.setEnterType("2");
             request.setIsReconnect("0");
 
-            String result = HttpUtil4LiveRecord.post("http://" + apiUrl + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
+            String result = HttpUtil4LiveRecord.post("http://" + apiHost + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
             CommonResponse cr = JSONUtil.fromJson(result, CommonResponse.class);
             if (Constant.RetCode.SUCCESS == cr.getCode()) {
                 //System.out.print("接口调用成功: " + cr.getData());
@@ -86,17 +90,16 @@ public class TestMethod {
         Set<String> userIdSet = readFile();
         for (String userId : userIdSet) {
             try {
-                userId = userId.substring(0, userId.length() - 1);
                 TestMethod testMethod = new TestMethod();
                 CommonResponse cr = testMethod.getLiveInitInfoTestForMultiUser(userId);
                 HashMap map = (HashMap) cr.getData();
                 Map initOutput = (Map) (map.get("liveInitInfo"));
-                String userInfoEncryptStr = (String) initOutput.get("userInfoEncryptStr");
                 String k = (String) initOutput.get("k");
 
-                String uriParamStr = null;
+                String token = "111";
+                String uriParamStr = liveId + "&"+ userId +"&2&1" + "/" + token + "/" + k;
                 try {
-                    uriParamStr = EncryptUtil.encrypt(userInfoEncryptStr + "_____" + k);
+                    uriParamStr = EncryptUtil.encrypt(uriParamStr);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -111,6 +114,15 @@ public class TestMethod {
     }
 
 
+    /**
+     * db.UserInfo.find({appId:"1"}, {_id:1}).limit(10).forEach(function(_x){
+     * print(_x._id)
+     * });
+     *
+     * 获取测试数据
+     *
+     * @return
+     */
     public static Set<String> readFile() {
 
         Set<String> userIdSet = new HashSet<>();
