@@ -19,19 +19,7 @@ public class ClientTest {
     @Test
     public void start() {
         try {
-            TestMethod testMethod = new TestMethod();
-            CommonResponse cr = testMethod.getLiveInitInfo();
-            HashMap map = (HashMap) cr.getData();
-            Map initOutput = (Map) (map.get("liveInitInfo"));
-            String userInfoEncryptStr = (String) initOutput.get("userInfoEncryptStr");
-            String k = (String) initOutput.get("k");
-            System.out.println("userInfoEncryptStr:\n" + userInfoEncryptStr);
-            System.out.println("k:\n" + k);
 
-            String uriParamStr = EncryptUtil.encrypt(userInfoEncryptStr + "_____" + K);
-
-            Thread webSocketClientTread = new Thread(new WebSocketClient(uriParamStr));
-            webSocketClientTread.start();
         } catch (Throwable e) {
             e.printStackTrace();
         }

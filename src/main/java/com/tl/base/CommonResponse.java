@@ -26,7 +26,7 @@ public class CommonResponse implements Serializable{
     }
 
 
-    public static CommonResponse success(Object data){
+    public static CommonResponse success(HashMap data){
         CommonResponse success = success();
         if(data == null){
             success.setData(new HashMap<>());

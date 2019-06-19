@@ -1,4 +1,4 @@
-package com.tl.util.requestUtils.json;
+package com.tl.json;
 
 public final class JSONException extends RuntimeException {
     public JSONException(final String message) {

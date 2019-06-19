@@ -54,7 +54,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         BusinessThreadPoolUtil.submit(() -> {
             while (true) {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
 
                     //定时发聊天
                     //String chat = "{\"expGrade\":18,\"sex\":\"2\",\"appId\":\"1\",\"liveId\":\"94324557\",\"avatar\":\"http:\\/\\/35.220.167.29:7009\\/fanqie\\/_s3\\/avatars\\/20190402\\/48db3526b7e26f62ed93a445e40a21fb_80x80.png\",\"userName\":\"用户2421\",\"userId\":\"1348bf1f-0442-4713-a06b-aa80d618cf16\",\"guardType\":0,\"openDanmu\":\"0\",\"role\":\"2\",\"content\":\"ui\"} "

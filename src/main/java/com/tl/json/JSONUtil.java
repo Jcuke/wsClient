@@ -1,4 +1,4 @@
-package com.tl.util.requestUtils.json;
+package com.tl.json;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -38,6 +38,7 @@ public class JSONUtil {
             return mapper.writeValueAsString(obj);
         } catch (IOException e) {
             log.error("对象转json异常:",e);
+            log.error("从json字符串获取指定key异常:",obj);
             throw new JSONException("把对象转换为JSON时出错了", e);
         }
     }
@@ -55,6 +56,7 @@ public class JSONUtil {
             return mapper.readValue(json, clazz);
         } catch (IOException e) {
             log.error("json字符串转对象异常:",e);
+            log.error("从json字符串获取指定key异常:",json);
             throw new JSONException(e.getLocalizedMessage());
         }
     }
@@ -101,8 +103,9 @@ public class JSONUtil {
             JsonObject element = root.getAsJsonObject();
             JsonPrimitive primitive = element.getAsJsonPrimitive(key);
             return primitive.getAsString();
-        } catch (Exception e) {
-            //log.error("从json字符串获取指定key异常:",e);
+        } catch (Throwable e) {
+            log.info("从json字符串获取指定key异常:",e);
+            log.error("从json字符串获取指定key异常:",strJson+":"+key);
         }
         return "";
     }
@@ -113,8 +116,9 @@ public class JSONUtil {
             JsonObject element = root.getAsJsonObject();
             JsonObject jsonObject = element.getAsJsonObject(key);
             return jsonObject.toString();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error("从json字符串获取指定key异常:",e);
+            log.error("从json字符串获取指定key异常:",strJson+":"+key);
         }
         return "";
     }
@@ -125,8 +129,9 @@ public class JSONUtil {
             JsonObject element = root.getAsJsonObject();
             JsonArray jsonArray = element.getAsJsonArray(key);
             return jsonArray.toString();
-        } catch (Exception e) {
-            log.error("从json字符串获取指定key异常:",e);
+        } catch (Throwable e) {
+            log.info("从json字符串获取指定key异常:",e);
+            log.error("从json字符串获取指定key异常:",strJson+":"+key);
         }
         return "";
     }

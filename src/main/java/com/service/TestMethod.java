@@ -4,14 +4,17 @@ import com.netty.WebSocketClient;
 import com.tl.base.CommonResponse;
 import com.tl.base.Constant;
 import com.tl.domain.live.LiveEnterRequest;
+import com.tl.json.JSONUtil;
 import com.tl.security.EncryptUtil;
-import com.tl.util.requestUtils.HttpUtil4LiveRecord;
-import com.tl.util.requestUtils.json.JSONUtil;
+import com.xiaoleilu.hutool.http.HttpUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Ron
@@ -23,33 +26,6 @@ public class TestMethod {
     public static final String socketHost = "websocket.kltbj.com:15247";
     public static final String apiHost = "54.254.179.115:5046";
     public static final String liveId = "05213010";
-    
-    public CommonResponse getLiveInitInfo() {
-        try {
-            //String apiUrl = "39.108.90.33:9051";
-            //String apiUrl = "192.168.88.200:9051";
-            //String apiUrl = "192.168.88.35:5046";
-
-            LiveEnterRequest request = new LiveEnterRequest();
-            request.setLiveId(liveId);
-            request.setAppId("2");
-            request.setUserId("220c508a-e2fd-4482-8da0-75854a8da72b");
-            request.setEnterType("2");
-            request.setIsReconnect("0");
-
-            String result = HttpUtil4LiveRecord.post("http://" + apiHost + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
-            CommonResponse cr = JSONUtil.fromJson(result, CommonResponse.class);
-            if (Constant.RetCode.SUCCESS == cr.getCode()) {
-                //System.out.print("接口调用成功: " + cr.getData());
-            } else {
-                System.out.print("接口调用失败: " + cr.getMsg());
-            }
-            return cr;
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     private CommonResponse getLiveInitInfoTestForMultiUser(String userId) {
         try {
@@ -64,10 +40,13 @@ public class TestMethod {
             request.setEnterType("2");
             request.setIsReconnect("0");
 
-            String result = HttpUtil4LiveRecord.post("http://" + apiHost + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
+            String result = HttpUtil.post("http://" + apiHost + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
+
+            //hutool 的 json 解析方法孙支持嵌套结构的解析
             CommonResponse cr = JSONUtil.fromJson(result, CommonResponse.class);
+
             if (Constant.RetCode.SUCCESS == cr.getCode()) {
-                //System.out.print("接口调用成功: " + cr.getData());
+                System.out.print("接口调用成功: " + cr.getData());
             } else {
                 System.out.print("接口调用失败: " + cr.getMsg());
             }
