@@ -22,7 +22,7 @@ public class TestMethod {
 
     public static final String socketHost = "websocket.kltbj.com:15247";
     public static final String apiHost = "54.254.179.115:5046";
-    public static final String liveId = "83710105";
+    public static final String liveId = "05213010";
     
     public CommonResponse getLiveInitInfo() {
         try {
