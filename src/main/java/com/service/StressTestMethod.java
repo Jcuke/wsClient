@@ -21,12 +21,21 @@ import java.util.Set;
  * @date : 2019/3/15 上午9:20
  * @description Copyright (C) 2018 TL.Crop, All Rights Reserved.
  */
-public class TestMethod {
+public class StressTestMethod {
 
-    public static final String socketHost = "websocket.kltbj.com:15247";
-    public static final String apiHost = "54.254.179.115:5046";
-    public static final String liveId = "49891227";
+    public static final String socketHost = "47.112.136.194:15247";
+    public static final String apiHost = "47.112.136.194:10011";
+    public static final String liveId = "93467122";
 
+
+    /**
+     * db.AnchorLiveInfo.find({openId:/3918/},{userId:1}).forEach(function(x){
+     * 	print(x.userId)
+     * });
+     *
+     * @param userId
+     * @return
+     */
     private CommonResponse getLiveInitInfoTestForMultiUser(String userId) {
         try {
             //String apiUrl = "39.108.90.33:9051";
@@ -40,7 +49,7 @@ public class TestMethod {
             request.setEnterType("2");
             request.setIsReconnect("0");
 
-            String result = HttpUtil.post("http://" + apiHost + "/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
+            String result = HttpUtil.post("http://" + apiHost + "/api/mobile/live/getLiveInitInfo", JSONUtil.toJson(request));
 
             //hutool 的 json 解析方法孙支持嵌套结构的解析
             CommonResponse cr = JSONUtil.fromJson(result, CommonResponse.class);
@@ -70,7 +79,7 @@ public class TestMethod {
         Set<String> userIdSet = readFile();
         for (String userId : userIdSet) {
             try {
-                TestMethod testMethod = new TestMethod();
+                StressTestMethod testMethod = new StressTestMethod();
                 CommonResponse cr = testMethod.getLiveInitInfoTestForMultiUser(userId);
                 HashMap map = (HashMap) cr.getData();
                 Map initOutput = (Map) (map.get("liveInitInfo"));
@@ -110,7 +119,7 @@ public class TestMethod {
 
         Set<String> userIdSet = new HashSet<>();
 
-        String pathname = "userData.txt";
+        String pathname = "userDataStressTest.txt";
         try {
             FileReader reader = new FileReader(pathname);
             BufferedReader br = new BufferedReader(reader);

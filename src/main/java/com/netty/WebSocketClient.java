@@ -1,8 +1,6 @@
 package com.netty;
 
-import com.service.TestMethod;
-import com.tl.base.CommonResponse;
-import com.tl.security.EncryptUtil;
+import com.service.StressTestMethod;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -24,12 +22,11 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 public final class WebSocketClient implements Runnable {
 
     String uriParamStr = "";
+    String userId = "";
 
     public WebSocketClient(String uriParamStr) {
 
@@ -65,7 +62,8 @@ public final class WebSocketClient implements Runnable {
         URI uri = null;
         try{
             //uri = new URI("ws", "", "192.168.88.35", 15247, "/websocket", uriParamStr, "");
-            uri = new URI("ws://"+ TestMethod.socketHost +"/websocket/" +  uriParamStr);
+            //uri = new URI("ws://"+ TestMethod.socketHost +"/websocket/" +  uriParamStr);
+            uri = new URI("ws://"+ StressTestMethod.socketHost +"/websocket/" +  uriParamStr);
             //uri = new URI("ws://192.168.88.35:15247/websocket");
             //uri = new URI(System.getProperty("url", "ws://127.0.0.1:15247/websocket"));
 

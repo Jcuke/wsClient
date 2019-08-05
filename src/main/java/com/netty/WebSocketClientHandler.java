@@ -17,6 +17,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketHandshakeException;
 import io.netty.util.CharsetUtil;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
     private final WebSocketClientHandshaker handshaker;
@@ -69,6 +70,56 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                     String s = Md5Utils.hash(businessData.toString() + t + r + "456");
 
                     chat.put("messageType", "chat");
+                    chat.put("businessData", businessData);
+                    chat.put("r", r);
+                    chat.put("t", t);
+                    chat.put("s", s);
+
+                    ctx.writeAndFlush(new TextWebSocketFrame(EncryptUtil.encrypt(chat.toString())));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        //连上后，开始定时发心跳
+        BusinessThreadPoolUtil.submit(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(2);
+
+                    //定时发聊天
+                    //String chat = "{\"expGrade\":18,\"sex\":\"2\",\"appId\":\"1\",\"liveId\":\"94324557\",\"avatar\":\"http:\\/\\/35.220.167.29:7009\\/fanqie\\/_s3\\/avatars\\/20190402\\/48db3526b7e26f62ed93a445e40a21fb_80x80.png\",\"userName\":\"用户2421\",\"userId\":\"1348bf1f-0442-4713-a06b-aa80d618cf16\",\"guardType\":0,\"openDanmu\":\"0\",\"role\":\"2\",\"content\":\"ui\"} "
+                    //ch.writeAndFlush(new TextWebSocketFrame(EncryptUtil.encrypt(randomString2(6))));
+                    JSONObject chat = new JSONObject();
+                    JSONObject businessData = new JSONObject();
+
+                    System.out.println(1);
+
+                    businessData.put("giftName","666");
+                    businessData.put("sex","0");
+                    businessData.put("anchorId","458f01f1-d4d7-4046-9435-1e5e78be43f5");
+                    businessData.put("uuid", UUID.randomUUID().toString());
+                    businessData.put("anchorName","用户39186964");
+                    businessData.put("effectType",2);
+                    businessData.put("giftId","8");
+                    businessData.put("sendIndex",0);
+                    businessData.put("liveCount","594");
+                    businessData.put("createTime", System.currentTimeMillis() / 1000);
+                    businessData.put("price","2");
+                    businessData.put("clientIp","0.1.2.3");
+                    businessData.put("giftNum",1);
+                    businessData.put("tomatoPrice","20");
+                    businessData.put("guardType","3");
+
+
+                    String r = randomString2(3);
+                    String t = String.valueOf(System.currentTimeMillis() / 1000);
+                    String s = Md5Utils.hash(businessData.toString() + t + r + "456");
+
+                    chat.put("messageType", "gift");
                     chat.put("businessData", businessData);
                     chat.put("r", r);
                     chat.put("t", t);
