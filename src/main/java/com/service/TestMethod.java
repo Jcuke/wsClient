@@ -85,7 +85,7 @@ public class TestMethod {
                     e.printStackTrace();
                 }
 
-                Thread webSocketClientTread = new Thread(new WebSocketClient(uriParamStr));
+                Thread webSocketClientTread = new Thread(new WebSocketClient(uriParamStr, (String) initOutput.get("nickname")));
                 webSocketClientTread.start();
                 System.out.println("count: " + (count++));
             } catch (Throwable e) {

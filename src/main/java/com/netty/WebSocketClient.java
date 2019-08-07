@@ -26,12 +26,13 @@ import java.net.URI;
 public final class WebSocketClient implements Runnable {
 
     String uriParamStr = "";
-    String userId = "";
+    String userName;
 
-    public WebSocketClient(String uriParamStr) {
+    public WebSocketClient(String uriParamStr, String userName) {
 
         //this.url = System.getProperty("url", "ws://127.0.0.1:15247/websocket" + "/" + uriParamStr);
         this.uriParamStr = uriParamStr;
+        this.userName = userName;
     }
 
     public static void main(String[] args) throws Exception {
@@ -104,7 +105,7 @@ public final class WebSocketClient implements Runnable {
             // Connect with V13 (RFC 6455 aka HyBi-17). You can change it to V08 or V00.
             // If you change it to V00, ping is not supported and remember to change
             // HttpResponseDecoder to WebSocketHttpResponseDecoder in the pipeline.
-            final WebSocketClientHandler handler = new WebSocketClientHandler(WebSocketClientHandshakerFactory.newHandshaker(uri, WebSocketVersion.V13, null, true, new DefaultHttpHeaders()));
+            final WebSocketClientHandler handler = new WebSocketClientHandler(WebSocketClientHandshakerFactory.newHandshaker(uri, WebSocketVersion.V13, null, true, new DefaultHttpHeaders()), this.userName);
 
             Bootstrap b = new Bootstrap();
             b.group(group).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {

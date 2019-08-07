@@ -14,6 +14,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketHandshakeException;
+import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 
 import java.util.Random;
@@ -22,9 +23,11 @@ import java.util.UUID;
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
     private final WebSocketClientHandshaker handshaker;
     private ChannelPromise handshakeFuture;
+    private String userName;
 
-    public WebSocketClientHandler(WebSocketClientHandshaker handshaker) {
+    public WebSocketClientHandler(WebSocketClientHandshaker handshaker, String userName) {
         this.handshaker = handshaker;
+        this.userName = userName;
     }
 
     public ChannelFuture handshakeFuture() {
@@ -35,6 +38,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
     public void handlerAdded(ChannelHandlerContext ctx) {
         handshakeFuture = ctx.newPromise();
 
+        ctx.attr(AttributeKey.valueOf("userName")).set(userName);
 
         //连上后，开始定时发心跳
         BusinessThreadPoolUtil.submit(() -> {
@@ -88,15 +92,13 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         BusinessThreadPoolUtil.submit(() -> {
             while (true) {
                 try {
-                    Thread.sleep(2);
+                    Thread.sleep(10000);
 
                     //定时发聊天
                     //String chat = "{\"expGrade\":18,\"sex\":\"2\",\"appId\":\"1\",\"liveId\":\"94324557\",\"avatar\":\"http:\\/\\/35.220.167.29:7009\\/fanqie\\/_s3\\/avatars\\/20190402\\/48db3526b7e26f62ed93a445e40a21fb_80x80.png\",\"userName\":\"用户2421\",\"userId\":\"1348bf1f-0442-4713-a06b-aa80d618cf16\",\"guardType\":0,\"openDanmu\":\"0\",\"role\":\"2\",\"content\":\"ui\"} "
                     //ch.writeAndFlush(new TextWebSocketFrame(EncryptUtil.encrypt(randomString2(6))));
                     JSONObject chat = new JSONObject();
                     JSONObject businessData = new JSONObject();
-
-                    System.out.println(1);
 
                     businessData.put("giftName","666");
                     businessData.put("sex","0");
@@ -169,8 +171,11 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
         WebSocketFrame frame = (WebSocketFrame) msg;
         if (frame instanceof TextWebSocketFrame) {
-            //TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
-            //System.out.println("WebSocket Client received message: " + EncryptUtil.decrypt(textFrame.text()));
+
+            String userName = (String) ctx.attr(AttributeKey.valueOf("userName")).get();
+
+            TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
+            System.out.println("WebSocket Client【"+ userName +"】 received message: " + EncryptUtil.decrypt(textFrame.text()));
 
         } else if (frame instanceof PongWebSocketFrame) {
             System.out.println("WebSocket Client received pong");

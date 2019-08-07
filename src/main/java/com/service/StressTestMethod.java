@@ -1,6 +1,8 @@
 package com.service;
 
 import com.netty.WebSocketClient;
+import com.tl.OnlineUser;
+import com.tl.StringUtil;
 import com.tl.base.CommonResponse;
 import com.tl.base.Constant;
 import com.tl.domain.live.LiveEnterRequest;
@@ -85,7 +87,7 @@ public class StressTestMethod {
                 Map initOutput = (Map) (map.get("liveInitInfo"));
                 ((Map)(initOutput.get("sysParamInfo"))).forEach((k,v) -> System.out.println(k + ":" + v));
                 String k = (String) initOutput.get("k");
-                System.out.println("userId: " + userId);
+                //String k = "11_1317359040525887222_遹遞遱逆遺遠遥逆遺遠遭逆遹遰遽遌遺遞遡逄遺遞遡逆遺遞遟遍遻遰遮遞遹逆遲遞選遣遡遍遹遳遱遀遺遰遹送遻遷逄送遹遞遶遞選遠遗遌遺過遾遟遺遠遲遞遺逆遱送遻遠遽遌遺遞遡逄遺遞遡逆遺遞遱送遹遰遗遍遹遠遭逅遺遰遭逅遺遞遮遜遭遣遱逛遹遞遱逆遺遠遥逆遺遠遭逆送違适遾送遭逆遠送送遧遛送遛遝逇遹遠遟遃遺過遽遌遺遞遡逄遺遞遡逆遺遞遱遍遹遠遭逅遺遰遭逅遺遞遭遍遹遞遱逆遺遠遥逆遺遠遭逆遹遠遱遍遹遠遭逅遺遰遭逅遺遞遭遃遹遞遱逆遺遠遥逆遺遠遭逆選遠遱遍遹遠遭逅遺遰遭逅遺遞遭遍遹遠遭逅遺遰遭逅遺遞遭遍遹遠遭逅遺遰遭逅遺遞遭遍遹遠遭逅遺遰遭逅遺遞遭遍遹遠遭逅遺遰遭逅遺遞遭遃_f6de088fcb3e7ae743e9db8e6c7c61c3";
                 String token = "111";
                 String uriParamStr = liveId + "&"+ userId +"&2&1" + "/" + token + "/" + k;
                 try {
@@ -94,14 +96,20 @@ public class StressTestMethod {
                     e.printStackTrace();
                 }
 
-                Thread webSocketClientTread = new Thread(new WebSocketClient(uriParamStr));
+
+
+                String userEnterInfo = StringUtil.decode(k.split("_")[2]);
+                OnlineUser onlineUser = OnlineUser.parseToOnlineUser(userEnterInfo);
+                String userName = onlineUser.getUserName();
+
+                Thread webSocketClientTread = new Thread(new WebSocketClient(uriParamStr, userName));
                 webSocketClientTread.start();
                 System.out.println("count: " + (count++));
             } catch (Throwable e) {
+                e.printStackTrace();
                 continue;
             }
             System.out.println("userId: " + userId);
-            break;
         }
     }
 
